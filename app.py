@@ -412,4 +412,4 @@ if st.session_state.history:
             st.markdown("---")
 
 st.markdown("<br>", unsafe_allow_html=True)
-st.caption("Retrieval-Augmented Generation prototype · MBA462B, CIA-3, Group 3 · Answers generated strictly from uploaded documents")
+st.caption("Retrieval-Augmented Generation prototype · MBA462B, Group 3 · Answers generated strictly from uploaded documents")

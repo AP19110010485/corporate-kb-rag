@@ -15,7 +15,7 @@ from pypdf import PdfReader
 
 st.set_page_config(
     page_title="Evidence Desk | Knowledge Base",
-    page_icon="▦",
+    page_icon="📇",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -73,7 +73,7 @@ inject_styles()
 
 api_key = str(st.secrets.get("GEMINI_API_KEY", "")).strip()
 if not api_key:
-    st.error("Gemini is not connected. Add GEMINI_API_KEY in Streamlit Secrets, then reload.", icon="!")
+    st.error("Gemini is not connected. Add GEMINI_API_KEY in Streamlit Secrets, then reload.", icon="⚠️")
     st.stop()
 
 client = genai.Client(api_key=api_key)
@@ -189,7 +189,7 @@ with left:
     st.caption("PDF files only · text-based policies work best · source pages are preserved")
     uploaded_files = st.file_uploader("Upload policy PDFs", type=["pdf"], accept_multiple_files=True, key="pdf-uploader", label_visibility="collapsed")
     if uploaded_files:
-        st.info(f"{len(uploaded_files)} document{'s' if len(uploaded_files) != 1 else ''} ready to index.", icon="▦")
+        st.info(f"{len(uploaded_files)} document{'s' if len(uploaded_files) != 1 else ''} ready to index.", icon="📄")
         for file in uploaded_files:
             size_mb = (getattr(file, "size", 0) or 0) / (1024 * 1024)
             st.caption(f"{file.name} · {size_mb:.2f} MB · pages verified during indexing")
@@ -211,10 +211,10 @@ with left:
                 st.session_state.kb_ready = True
                 status.update(label="Knowledge base ready", state="complete", expanded=False)
             progress.empty()
-            st.success(f"Indexed {len(chunks):,} evidence chunks from {len(uploaded_files)} document(s).", icon="✓")
+            st.success(f"Indexed {len(chunks):,} evidence chunks from {len(uploaded_files)} document(s).", icon="✅")
         except Exception as error:
             progress.empty()
-            st.error(f"Indexing failed: {error}. Check the PDF and Gemini connection, then try again.", icon="!")
+            st.error(f"Indexing failed: {error}. Check the PDF and Gemini connection, then try again.", icon="⚠️")
 
     st.markdown("<div class='section-label'>Ask the desk</div>", unsafe_allow_html=True)
     st.markdown("### What do you need to verify?")
@@ -226,7 +226,7 @@ with left:
                 answer, sources = rag_query_safe(question.strip())
             st.session_state.history.append({"question": question.strip(), "answer": answer, "sources": sources, "time": datetime.now(timezone.utc).strftime("%H:%M UTC")})
         except Exception as error:
-            st.error(f"The answer could not be generated: {error}", icon="!")
+            st.error(f"The answer could not be generated: {error}", icon="⚠️")
 
     if not ready:
         st.markdown("<div class='panel'><div class='eyebrow'>Not ready yet</div><p style='margin:.45rem 0 0;color:#59656a'>Build your knowledge base first. Questions stay disabled until the evidence index is complete.</p></div>", unsafe_allow_html=True)

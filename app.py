@@ -594,6 +594,24 @@ if st.session_state.page == "Home":
         run_query(home_q.strip())
         st.rerun()
 
+    # --- Latest answer (this was missing before — answers were saved to
+    # history but never actually rendered on the Home page) ---
+    if st.session_state.history:
+        latest = st.session_state.history[-1]
+        st.markdown(f"""
+        <div class="answer-card">
+            <div class="label">💬 {latest['question']}</div>
+            <p>{latest['answer']}</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        pills = "".join(
+            f'<span class="source-pill">📄 {s["source"]} — Page {s["page"]}</span>'
+            for s in latest["sources"]
+        )
+        st.markdown(pills, unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+
     # --- Feature cards ---
     f1, f2, f3, f4 = st.columns(4)
     features = [

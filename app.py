@@ -11,6 +11,13 @@ explorer, analytics, and settings — all built with Streamlit + custom CSS
 
 import time
 from datetime import datetime
+from zoneinfo import ZoneInfo
+
+IST = ZoneInfo("Asia/Kolkata")
+
+
+def now_ist():
+    return datetime.now(IST)
 
 import numpy as np
 import faiss
@@ -441,12 +448,12 @@ def run_query(q):
         "question": q,
         "answer": answer,
         "sources": sources,
-        "time": datetime.now().strftime("%I:%M %p"),
+        "time": now_ist().strftime("%I:%M %p"),
     })
 
 
 def time_greeting():
-    hour = datetime.now().hour
+    hour = now_ist().hour
     if hour < 12:
         return "Good morning 👋"
     if hour < 17:
